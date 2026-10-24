@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public record ApiVersion(int major, int minor, int patch) implements Comparable<ApiVersion> {
 
-    public static final ApiVersion CURRENT = new ApiVersion(1, 3, 0);
+    public static final ApiVersion CURRENT = new ApiVersion(1, 3, 2);
 
     public boolean isAtLeast(int reqMajor, int reqMinor) {
         return isAtLeast(reqMajor, reqMinor, 0);

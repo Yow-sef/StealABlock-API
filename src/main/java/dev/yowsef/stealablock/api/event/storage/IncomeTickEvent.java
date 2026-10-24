@@ -39,6 +39,9 @@ public final class IncomeTickEvent extends CancellableStealABlockEvent {
     }
 
     public void setIncomeAmount(double incomeAmount) {
+        if (!Double.isFinite(incomeAmount) || incomeAmount < 0.0) {
+            throw new IllegalArgumentException("incomeAmount must be finite and >= 0");
+        }
         this.incomeAmount = incomeAmount;
     }
 

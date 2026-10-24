@@ -1,6 +1,7 @@
 package dev.yowsef.stealablock.api.player;
 
 import dev.yowsef.stealablock.api.annotation.AnyThread;
+import dev.yowsef.stealablock.api.annotation.MainThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface PlayerService {
 
+    @MainThread
     @NotNull PlayerProfile getProfile(@NotNull UUID playerId);
 
     @AnyThread

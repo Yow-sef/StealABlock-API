@@ -38,6 +38,9 @@ public final class IncomeCollectEvent extends CancellableStealABlockEvent {
     }
 
     public void setAmount(double amount) {
+        if (!Double.isFinite(amount) || amount < 0.0) {
+            throw new IllegalArgumentException("amount must be finite and >= 0");
+        }
         this.amount = amount;
     }
 

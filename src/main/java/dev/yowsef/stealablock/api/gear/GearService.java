@@ -28,6 +28,11 @@ public interface GearService {
             @NotNull List<String> abilityLines
     ) {}
 
+    /**
+     * Global gear ability hooks. {@code onUse} runs on right-click and
+     * {@code onAttack} runs when the player damages another player. Check the
+     * player's owned gear inside the handler if the ability is gear-specific.
+     */
     interface GearAbility {
         @NotNull Key key();
         default void onUse(@NotNull Player player) {}

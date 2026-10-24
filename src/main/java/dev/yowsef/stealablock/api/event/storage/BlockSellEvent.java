@@ -37,6 +37,9 @@ public final class BlockSellEvent extends CancellableStealABlockEvent {
     }
 
     public void setTotalPayout(double totalPayout) {
+        if (!Double.isFinite(totalPayout) || totalPayout < 0.0) {
+            throw new IllegalArgumentException("totalPayout must be finite and >= 0");
+        }
         this.totalPayout = totalPayout;
     }
 

@@ -38,6 +38,9 @@ public final class BalanceChangeEvent extends CancellableStealABlockEvent {
     }
 
     public void setNewBalance(double newBalance) {
+        if (!Double.isFinite(newBalance)) {
+            throw new IllegalArgumentException("newBalance must be finite");
+        }
         this.newBalance = Math.max(0.0, newBalance);
     }
 

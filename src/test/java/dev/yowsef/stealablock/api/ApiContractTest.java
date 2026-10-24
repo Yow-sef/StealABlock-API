@@ -76,6 +76,7 @@ class ApiContractTest {
 
     @Test
     void testApiVersionSemantics() {
+        assertTrue(ApiVersion.CURRENT.isAtLeast(1, 3, 2));
         ApiVersion v130 = new ApiVersion(1, 3, 0);
         assertTrue(v130.isAtLeast(1, 3));
         assertTrue(v130.isAtLeast(1, 2, 9));

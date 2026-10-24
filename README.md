@@ -1,8 +1,12 @@
-# StealABlock Developer API
+﻿# StealABlock Developer API
 
-Official public developer API for the StealABlock Minecraft plugin (Paper 1.21+).
+Public developer API for the StealABlock Minecraft plugin (Paper 1.21+, Java 21).
+The full guide is in [`docs/API.md`](docs/API.md).
 
-## Dependency Setup
+## Dependency setup
+
+Replace the JitPack coordinates if you publish from a fork or a separate
+API-only repository.
 
 ### Gradle (Groovy)
 
@@ -14,7 +18,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.github.Yow-sef:StealABlock-API:1.3.0'
+    compileOnly 'com.github.Yow-sef:StealABlock-API:v1.3.2'
+    compileOnly 'io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT'
 }
 ```
 
@@ -28,7 +33,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.github.Yow-sef:StealABlock-API:1.3.0")
+    compileOnly("com.github.Yow-sef:StealABlock-API:v1.3.2")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 }
 ```
 
@@ -46,91 +52,69 @@ dependencies {
     </repository>
 </repositories>
 
-<dependencies>
-    <dependency>
-        <groupId>com.github.Yow-sef</groupId>
-        <artifactId>StealABlock-API</artifactId>
-        <version>1.3.0</version>
-        <scope>provided</scope>
-    </dependency>
-</dependencies>
+<dependency>
+    <groupId>com.github.Yow-sef</groupId>
+    <artifactId>StealABlock-API</artifactId>
+    <version>v1.3.2</version>
+    <scope>provided</scope>
+</dependency>
+<dependency>
+    <groupId>io.papermc.paper</groupId>
+    <artifactId>paper-api</artifactId>
+    <version>1.21.4-R0.1-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
 ```
 
-### Add to plugin.yml
+### plugin.yml
 
 ```yaml
-depend: [StealABlock]
-# or:
-# softdepend: [StealABlock]
+depend: [stealablock]
 ```
 
-## Quick Start
-
-### 1. Access the API
+## Quick start
 
 ```java
 import dev.yowsef.stealablock.api.StealABlockAPI;
 import dev.yowsef.stealablock.api.StealABlockProvider;
+import dev.yowsef.stealablock.api.addon.StealABlockAddon;
 
-public class MyAddon extends JavaPlugin {
+public final class MyAddon extends JavaPlugin implements StealABlockAddon {
+
     @Override
     public void onEnable() {
-        if (!StealABlockProvider.isAvailable()) {
-            getLogger().warning("StealABlock is not available!");
-            return;
-        }
+        StealABlockProvider.get().addons().register(this, this);
+    }
 
-        StealABlockAPI api = StealABlockProvider.get();
-        getLogger().info("Connected to StealABlock API v" + api.getVersion());
+    @Override
+    public void onApiReady(StealABlockAPI api) {
+        getLogger().info("Connected to StealABlock API v" + api.getApiVersion());
+        // Register modifiers, steal rules, mutations, placeholders, etc.
     }
 }
 ```
 
-### 2. Register an Income / Steal Modifier
+## Main services
 
-```java
-api.modifiers().register(ModifierTarget.INCOME, (player, base) -> {
-    if (player.hasPermission("myaddon.vip")) {
-        return base.multiply(1.5);
-    }
-    return base;
-});
-```
+| Accessor | Purpose |
+|---|---|
+| `api.players()` | Player snapshots, arena/Bedrock checks, tutorial state |
+| `api.money()` / `api.credits()` | Atomic balance and credit transactions |
+| `api.blocks()` / `api.mutations()` | Block definitions and mutation tiers |
+| `api.storage()` | Stored blocks, sales, collection, upgrades |
+| `api.steals()` | Active steals and pluggable steal rules |
+| `api.plots()` / `api.gates()` / `api.arenas()` | Plot, gate, and arena state |
+| `api.conveyors()` | Conveyor control and moving blocks |
+| `api.fusion()` | Fusion eligibility and real odds |
+| `api.rebirth()` / `api.prestige()` | Progression state and actions |
+| `api.milestones()` / `api.contracts()` | Discoveries, claims, heist board |
+| `api.gameEvents()` | Built-in and custom server events |
+| `api.gear()` / `api.cosmetics()` | Gear catalog/abilities and cosmetics |
+| `api.settings()` | Player HUD/notification settings |
+| `api.leaderboards()` | Sync and async leaderboard queries |
+| `api.menus()` | Java and Bedrock menu opener |
+| `api.modifiers()` / `api.placeholders()` | Extension pipelines and placeholders |
 
-### 3. Register a Steal Rule
+See [`docs/API.md`](docs/API.md) for event lists, modifier types, threading
+rules, and extension registry details.
 
-```java
-api.stealing().registerRule((thief, victim, targetBlock, item) -> {
-    if (victim.hasPermission("myaddon.shield")) {
-        return StealDecision.deny("Target player has active VIP shield protection.");
-    }
-    return StealDecision.allow();
-});
-```
-
-### 4. Listen to Events
-
-```java
-@EventHandler
-public void onConveyorClaim(ConveyorBlockClaimEvent event) {
-    event.getPlayer().sendMessage("Claimed " + event.getBlockType().name());
-}
-
-@EventHandler
-public void onSteal(StealCompleteEvent event) {
-    getServer().broadcastMessage(event.getThief().getName() + " stole from " + event.getVictim().getName());
-}
-```
-
-## Services
-
-- `api.economy()`: player balances, transactions, credit transactions.
-- `api.arenas()`: arenas, plots, game states, conveyor endpoints.
-- `api.storage()`: player anvils, stored blocks, income rates.
-- `api.stealing()`: active steals, steal rules, channel times.
-- `api.modifiers()`: pipeline for income, channel duration, deposit duration, and sell prices.
-- `api.mutations()`: custom mutation tiers, drop rates, and fusion rules.
-- `api.events()`: trigger custom server game events.
-- `api.contracts()`: player contracts, completions, resets.
-- `api.ui()`: menu registrations and views.
-- `api.placeholders()`: addon custom placeholders.
