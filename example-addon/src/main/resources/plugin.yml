@@ -1,0 +1,8 @@
+name: StealABlock-ExampleAddon
+version: '${project.version}'
+main: dev.yowsef.stealablock.example.ExampleStealAddon
+api-version: '1.21'
+author: Yowsef
+description: Reference addon demonstrating the StealABlock Developer API (modifiers, steal rules, events, mutations, placeholders).
+depend:
+  - stealablock

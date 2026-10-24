@@ -115,6 +115,12 @@ public final class MyAddon extends JavaPlugin implements StealABlockAddon {
 | `api.menus()` | Java and Bedrock menu opener |
 | `api.modifiers()` / `api.placeholders()` | Extension pipelines and placeholders |
 
+## Example addon
+
+A complete reference addon is included in [`example-addon/`](example-addon/).
+It registers a modifier, steal rule, custom game event, mutation, placeholder,
+and event listeners.
+
 See [`docs/API.md`](docs/API.md) for event lists, modifier types, threading
 rules, and extension registry details.
 
