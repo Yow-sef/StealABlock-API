@@ -4,6 +4,10 @@ Java 21 API for StealABlock (`dev.yowsef.stealablock.api`). It exposes the
 plugin's gameplay systems to external plugins without reflection or internal
 package access.
 
+StealABlock's core plugin is closed source. This repository publishes only the
+public API and the example addon; addons use the API and never need the core
+source.
+
 The API module has no dependency on the core module. Core bundles the API
 classes in its shaded jar, so addons compile against `stealablock-api` and run
 against the installed StealABlock plugin.

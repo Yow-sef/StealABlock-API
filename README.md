@@ -3,10 +3,13 @@
 Public developer API for the StealABlock Minecraft plugin (Paper 1.21+, Java 21).
 The full guide is in [`docs/API.md`](docs/API.md).
 
+StealABlock's core plugin is closed source. This project publishes only the
+public API and the example addon; addons use the API and never need the core
+source.
+
 ## Dependency setup
 
-Replace the JitPack coordinates if you publish from a fork or a separate
-API-only repository.
+The official API artifact is published from `Yow-sef/StealABlock-API`.
 
 ### Gradle (Groovy)
 
@@ -114,12 +117,6 @@ public final class MyAddon extends JavaPlugin implements StealABlockAddon {
 | `api.leaderboards()` | Sync and async leaderboard queries |
 | `api.menus()` | Java and Bedrock menu opener |
 | `api.modifiers()` / `api.placeholders()` | Extension pipelines and placeholders |
-
-## Example addon
-
-A complete reference addon is included in [`example-addon/`](example-addon/).
-It registers a modifier, steal rule, custom game event, mutation, placeholder,
-and event listeners.
 
 See [`docs/API.md`](docs/API.md) for event lists, modifier types, threading
 rules, and extension registry details.
